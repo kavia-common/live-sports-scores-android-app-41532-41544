@@ -1,0 +1,4 @@
+{
+    "command": "./gradlew installDebug",
+    "working_directory": "/home/kavia/workspace/code-generation/live-sports-scores-android-app-41532-41544/android_tv_frontend"
+}
