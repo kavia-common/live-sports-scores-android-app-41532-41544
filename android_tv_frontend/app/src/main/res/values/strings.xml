@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Live Sports Scores TV</string>
+
+    <!-- Firebase placeholders (leave empty to enable mock mode) -->
+    <string name="firebase_project_id"></string>
+    <string name="firebase_application_id"></string>
+    <string name="firebase_api_key"></string>
+
+    <!-- Content descriptions -->
+    <string name="cd_home_logo">Home team logo</string>
+    <string name="cd_away_logo">Away team logo</string>
+</resources>
