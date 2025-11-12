@@ -128,7 +128,7 @@ class MatchCardPresenter(private val imageLoader: ImageLoader) : Presenter() {
                 },
                 onError = {
                     cardView.mainImage =
-                        ContextCompat.getDrawable(cardView.context, R.drawable.lb_ic_loop)
+                        ContextCompat.getDrawable(cardView.context, R.drawable.ic_loop)
                 }
             )
             .build()

@@ -38,8 +38,10 @@ class MatchDetailsFragment : DetailsSupportFragment() {
         highlightUrl = requireArguments().getString(MatchDetailsActivity.EXTRA_MATCH_HIGHLIGHT, null)
 
         val detailsOverview = DetailsOverviewRow("$home vs $away")
-        detailsOverview.subtitle = "$league  •  $startTime"
-        detailsOverview.imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.lb_ic_play)
+        // DetailsOverviewRow in Leanback does not expose 'subtitle' property in some versions.
+        // Set the item object to a combined title/subtitle string; our DetailsDescriptionPresenter will render it.
+        detailsOverview.item = "$home vs $away\n$league  •  $startTime"
+        detailsOverview.imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play)
 
         val description = "Score: $score\n" +
                 "League: $league\n" +
@@ -108,7 +110,7 @@ class MatchDetailsFragment : DetailsSupportFragment() {
                     .data(url.ifBlank { "https://placehold.co/128x128?text=HOME" })
                     .target(
                         onSuccess = { d: Drawable -> target.setImageDrawable(d) },
-                        onError = { target.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.lb_ic_loop)) }
+                        onError = { target.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.ic_loop)) }
                     ).build()
                 loader.enqueue(req)
             }

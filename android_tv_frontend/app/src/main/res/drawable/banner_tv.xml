@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple banner placeholder for Android TV home screen; replace with branded asset when available -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#3b82f6"/>
+        </shape>
+    </item>
+    <item>
+        <bitmap
+            android:src="@drawable/ic_play"
+            android:gravity="center"/>
+    </item>
+</layer-list>
