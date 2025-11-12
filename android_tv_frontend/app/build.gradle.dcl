@@ -28,5 +28,10 @@ androidApplication {
         // Image loading
         implementation("io.coil-kt:coil:2.6.0")
         implementation("io.coil-kt:coil-svg:2.6.0")
+
+        // JUnit4 for unit test discovery without explicit JUnit Platform configuration
+        implementation("junit:junit:4.13.2")
+        // Ensure JUnit Platform engine is available so JUnit Jupiter tests are discovered
+        implementation("org.junit.jupiter:junit-jupiter-engine:5.10.2")
     }
 }

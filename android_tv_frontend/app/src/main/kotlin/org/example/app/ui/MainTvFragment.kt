@@ -5,7 +5,15 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.BrowseSupportFragment
-import androidx.leanback.widget.*
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.ImageCardView
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.leanback.widget.Presenter
+import androidx.leanback.widget.Row
+import androidx.leanback.widget.RowPresenter
 import androidx.lifecycle.lifecycleScope
 import coil.ImageLoader
 import coil.decode.SvgDecoder
@@ -111,9 +119,9 @@ class MatchCardPresenter(private val imageLoader: ImageLoader) : Presenter() {
         return ViewHolder(cardView)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val cardView = viewHolder.view as ImageCardView
-        val match = item as org.example.app.model.Match
+        val match = item as? org.example.app.model.Match ?: return
 
         cardView.titleText = "${match.home.name} vs ${match.away.name}"
         cardView.contentText = "Score: ${match.score}"

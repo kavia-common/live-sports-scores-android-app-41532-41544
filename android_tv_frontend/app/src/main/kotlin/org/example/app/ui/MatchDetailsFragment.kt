@@ -5,7 +5,16 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.DetailsSupportFragment
-import androidx.leanback.widget.*
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter
+import androidx.leanback.widget.Action
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.ClassPresenterSelector
+import androidx.leanback.widget.DetailsOverviewRow
+import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
+import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.Presenter
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
@@ -37,9 +46,9 @@ class MatchDetailsFragment : DetailsSupportFragment() {
         val startTime = requireArguments().getString(MatchDetailsActivity.EXTRA_MATCH_START_TIME, "")
         highlightUrl = requireArguments().getString(MatchDetailsActivity.EXTRA_MATCH_HIGHLIGHT, null)
 
+        // Build a DetailsOverviewRow; Leanback's DetailsOverviewRow does not have 'subtitle' in some versions.
+        // We pass a composite string to the description presenter to render title and subtitle/body appropriately.
         val detailsOverview = DetailsOverviewRow("$home vs $away")
-        // DetailsOverviewRow in Leanback does not expose 'subtitle' property in some versions.
-        // Set the item object to a combined title/subtitle string; our DetailsDescriptionPresenter will render it.
         detailsOverview.item = "$home vs $away\n$league  •  $startTime"
         detailsOverview.imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play)
 
@@ -80,8 +89,12 @@ class MatchDetailsFragment : DetailsSupportFragment() {
 
     class DetailsDescriptionPresenter : AbstractDetailsDescriptionPresenter() {
         override fun onBindDescription(vh: ViewHolder, item: Any) {
-            val title = item as String
+            val combined = item as String
+            val parts = combined.split("\n", limit = 2)
+            val title = parts.getOrNull(0) ?: ""
+            val subtitle = parts.getOrNull(1) ?: ""
             vh.title.text = title
+            vh.subtitle.text = subtitle
             vh.body.text = "Press Play to watch highlights if available."
         }
     }
@@ -95,8 +108,8 @@ class MatchDetailsFragment : DetailsSupportFragment() {
             return ViewHolder(v)
         }
 
-        override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-            val info = item as DetailsInfo
+        override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
+            val info = item as? DetailsInfo ?: return
             val tv = viewHolder.view.findViewById<android.widget.TextView>(R.id.info_text)
             tv.text = info.text
 
@@ -106,7 +119,7 @@ class MatchDetailsFragment : DetailsSupportFragment() {
             val ctx = viewHolder.view.context
             val loader = ImageLoader.Builder(ctx).components { add(SvgDecoder.Factory()) }.build()
             val makeReq = { url: String, target: android.widget.ImageView ->
-                val req = coil.request.ImageRequest.Builder(ctx)
+                val req = ImageRequest.Builder(ctx)
                     .data(url.ifBlank { "https://placehold.co/128x128?text=HOME" })
                     .target(
                         onSuccess = { d: Drawable -> target.setImageDrawable(d) },
